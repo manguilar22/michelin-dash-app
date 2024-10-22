@@ -1,0 +1,27 @@
+version: '3'
+services:
+  restaurants_db:
+    image: postgres:michelin
+    container_name: 'michelin-postgresdb'
+    build:
+      context: ./data
+      dockerfile: Dockerfile
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: restaurants
+  dash:
+    image: python:dash-michelin
+    container_name: 'michelin-dash'
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      HOST: restaurants_db
+      PORT: 5432
+      USER: user
+      PASSWORD: password
+      DATABASE: restaurants
+      DEBUG: 'False'
+    ports:
+      - 8080:8080
